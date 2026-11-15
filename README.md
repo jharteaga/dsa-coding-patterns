@@ -5,6 +5,8 @@ how to recognise each pattern, the brute-force solution, the insight, and the op
 with step-by-step animations, test cases and in-browser timings. Code is shown in JavaScript,
 TypeScript and C#.
 
+![DSA Patterns preview](docs/preview.png)
+
 ## Run it
 
 ```bash
