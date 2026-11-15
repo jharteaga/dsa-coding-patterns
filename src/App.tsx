@@ -25,9 +25,9 @@ function TopBar() {
   const link = ({ isActive }: { isActive: boolean }) =>
     `rounded-md px-2.5 py-1 text-sm font-medium whitespace-nowrap ${isActive ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`;
   const mobileLink = ({ isActive }: { isActive: boolean }) =>
-    `block rounded-lg px-3 py-2.5 text-base font-medium ${isActive ? 'bg-indigo-600 text-white' : 'text-(--ink) hover:bg-(--page)'}`;
+    `block rounded-lg px-3 py-3 text-base font-medium ${isActive ? 'bg-indigo-600 text-white' : 'text-(--ink) hover:bg-(--page)'}`;
   const seg = (active: boolean, pad: string) =>
-    `rounded-md ${pad} text-xs font-bold ${active ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`;
+    `rounded-md ${pad} font-bold ${active ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`;
   const items = [
     { to: '/', label: t.nav.patterns, end: true },
     { to: '/big-o', label: t.nav.bigO },
@@ -35,39 +35,57 @@ function TopBar() {
     { to: '/quiz', label: t.nav.quiz },
   ];
 
-  const codeLang = (
-    <div className="flex rounded-lg border border-(--line) p-0.5" role="group" aria-label={t.top.codeLang}>
+  const codeLang = (big: boolean) => (
+    <div className={`flex rounded-lg border border-(--line) p-0.5 ${big ? 'w-full' : ''}`} role="group" aria-label={t.top.codeLang}>
       {LANGS.map((l) => (
-        <button key={l.id} onClick={() => setLang(l.id)} aria-pressed={lang === l.id} className={seg(lang === l.id, 'px-2.5 py-1')}>
+        <button
+          key={l.id}
+          onClick={() => setLang(l.id)}
+          aria-pressed={lang === l.id}
+          className={`${seg(lang === l.id, big ? 'min-h-11 flex-1 px-3 text-sm' : 'px-2.5 py-1 text-xs')}`}
+        >
           {l.label}
         </button>
       ))}
     </div>
   );
-  const uiLang = (
-    <div className="flex rounded-lg border border-(--line) p-0.5" role="group" aria-label={t.top.uiLang}>
+  const uiLang = (big: boolean) => (
+    <div className={`flex rounded-lg border border-(--line) p-0.5 ${big ? 'w-full' : ''}`} role="group" aria-label={t.top.uiLang}>
       {LOCALES.map((l) => (
-        <button key={l.id} onClick={() => setLocale(l.id)} aria-pressed={locale === l.id} lang={l.id} className={seg(locale === l.id, 'px-2 py-1')}>
+        <button
+          key={l.id}
+          onClick={() => setLocale(l.id)}
+          aria-pressed={locale === l.id}
+          lang={l.id}
+          className={`${seg(locale === l.id, big ? 'min-h-11 flex-1 px-3 text-sm' : 'px-2 py-1 text-xs')}`}
+        >
           {l.label}
         </button>
       ))}
     </div>
   );
-  const darkBtn = (
+  const darkBtn = (big: boolean) => (
     <button
       onClick={() => setDark(!dark)}
-      className="rounded-md border border-(--line) px-2 py-1 text-sm hover:bg-(--page)"
+      className={
+        big
+          ? 'flex min-h-12 w-full items-center justify-between rounded-lg border border-(--line) px-4 text-base font-medium hover:bg-(--page)'
+          : 'rounded-md border border-(--line) px-2 py-1 text-sm hover:bg-(--page)'
+      }
       aria-label={t.top.toggleDark}
       title={t.top.toggleDark}
     >
-      {dark ? '☀' : '☾'}
+      {big && <span>{t.top.toggleDark}</span>}
+      <span aria-hidden="true" className={big ? 'text-xl' : ''}>
+        {dark ? '☀' : '☾'}
+      </span>
     </button>
   );
 
   return (
     <header className="sticky top-0 z-20 border-b border-(--line) bg-(--surface)/95 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-[1500px] items-center gap-3 px-4">
-        <NavLink to="/" className="mr-2 text-base font-extrabold tracking-tight whitespace-nowrap">
+      <div className="mx-auto flex h-16 max-w-[1500px] items-center gap-3 px-4">
+        <NavLink to="/" className="mr-2 text-2xl font-extrabold md:text-xl tracking-tight whitespace-nowrap">
           {locale === 'es' ? (
             <>
               Patrones <span className="text-indigo-600 dark:text-indigo-400">DSA</span>
@@ -87,18 +105,18 @@ function TopBar() {
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
           <span className="hidden text-xs text-(--ink-2) lg:inline">{t.top.codeIn}</span>
-          {codeLang}
-          {uiLang}
-          {darkBtn}
+          {codeLang(false)}
+          {uiLang(false)}
+          {darkBtn(false)}
         </div>
         <button
-          className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-lg border border-(--line) hover:bg-(--page) md:hidden"
+          className="ml-auto inline-flex h-12 w-12 items-center justify-center rounded-lg border border-(--line) hover:bg-(--page) md:hidden"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label="Menu"
           onClick={() => setOpen(!open)}
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             {open ? <path d="M4 4l12 12M16 4L4 16" /> : <path d="M3 5h14M3 10h14M3 15h14" />}
           </svg>
         </button>
@@ -112,19 +130,16 @@ function TopBar() {
               </NavLink>
             ))}
           </nav>
-          <div className="mt-3 flex flex-col gap-3 border-t border-(--line) pt-3">
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-(--ink-2)">{t.top.codeIn}</span>
-              {codeLang}
+          <div className="mt-3 flex flex-col gap-4 border-t border-(--line) pt-4">
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-(--ink-2)">{t.top.codeIn}</span>
+              {codeLang(true)}
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-(--ink-2)">{t.top.uiLang}</span>
-              {uiLang}
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-medium text-(--ink-2)">{t.top.uiLang}</span>
+              {uiLang(true)}
             </div>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-sm text-(--ink-2)">{t.top.toggleDark}</span>
-              {darkBtn}
-            </div>
+            {darkBtn(true)}
           </div>
         </div>
       )}
@@ -137,7 +152,7 @@ function Sidebar() {
   const link = ({ isActive }: { isActive: boolean }) =>
     `block rounded-md px-2 py-1 text-[13px] ${isActive ? 'bg-indigo-600 font-semibold text-white' : 'text-(--ink) hover:bg-(--surface)'}`;
   return (
-    <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-60 shrink-0 overflow-y-auto py-4 pr-2 lg:block">
+    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-60 shrink-0 overflow-y-auto py-4 pr-2 lg:block">
       {byGroup.map(([group, list]) => (
         <div key={group} className="mb-4">
           <div className="flex items-center gap-1.5 px-1 pb-1.5 text-[11px] font-extrabold tracking-wider text-amber-700 uppercase dark:text-amber-400">
