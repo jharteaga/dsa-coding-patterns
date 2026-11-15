@@ -7,6 +7,27 @@ TypeScript and C#.
 
 ![DSA Patterns preview](docs/preview.png)
 
+## Purpose
+
+Most people prepare for coding interviews by memorising solutions to individual problems. That doesn't
+transfer: a new problem looks unfamiliar even when it is a disguised version of one you have already seen.
+This app teaches the **patterns** behind the problems instead (two pointers, sliding window, hash maps,
+and so on), so you can recognise which one applies and derive the solution yourself.
+
+For every problem it walks through the same path:
+
+- **Recognise it** — the signals in the problem statement that point to a pattern.
+- **Brute force** — the obvious solution, and why it is too slow.
+- **The insight** — the observation that removes the wasted work.
+- **The optimal solution** — with its time and space complexity.
+
+To make this concrete rather than abstract, it also includes:
+
+- **Step-by-step animations** that show how the data changes as the algorithm runs.
+- **Test cases** that every solution is actually run against.
+- **In-browser timings** so you can see the brute-force and optimal approaches diverge as the input grows.
+- **Code in JavaScript, TypeScript and C#**, so you can follow along in the language you use.
+
 ## Run it
 
 ```bash
