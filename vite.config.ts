@@ -62,6 +62,8 @@ function codePlugin(): Plugin {
 }
 
 export default defineConfig({
+  // Relative base so the site works from a GitHub Pages sub-path (the app uses HashRouter).
+  base: './',
   plugins: [codePlugin(), react(), tailwindcss()],
   // Cross-origin isolation gives performance.now() ~5µs resolution instead of ~100µs.
   server: {
