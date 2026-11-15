@@ -20,6 +20,8 @@ const en = {
     codeLang: 'Code language',
     uiLang: 'Interface language',
     toggleDark: 'Toggle dark mode',
+    switchToLight: 'Switch to light mode',
+    switchToDark: 'Switch to dark mode',
   },
   groups: {
     Trees: 'Trees',
@@ -163,6 +165,8 @@ const es: Messages = {
     codeLang: 'Lenguaje del código',
     uiLang: 'Idioma de la interfaz',
     toggleDark: 'Cambiar modo oscuro',
+    switchToLight: 'Cambiar a modo claro',
+    switchToDark: 'Cambiar a modo oscuro',
   },
   groups: {
     Trees: 'Árboles',

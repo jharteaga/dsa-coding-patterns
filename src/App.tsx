@@ -72,6 +72,7 @@ function TopBar() {
       ))}
     </div>
   );
+  const darkLabel = dark ? t.top.switchToLight : t.top.switchToDark;
   const darkBtn = (big: boolean) => (
     <button
       onClick={() => setDark(!dark)}
@@ -80,10 +81,10 @@ function TopBar() {
           ? "flex min-h-12 w-full items-center justify-between rounded-lg border border-(--line) px-4 text-base font-medium hover:bg-(--page)"
           : "rounded-md border border-(--line) px-2 py-1 text-sm hover:bg-(--page)"
       }
-      aria-label={t.top.toggleDark}
-      title={t.top.toggleDark}
+      aria-label={darkLabel}
+      title={darkLabel}
     >
-      {big && <span>{t.top.toggleDark}</span>}
+      {big && <span>{darkLabel}</span>}
       <span aria-hidden="true" className={big ? "text-xl" : ""}>
         {dark ? "☀" : "☾"}
       </span>
