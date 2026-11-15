@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --surface: #ffffff;
+  --page: #f6f6f4;
+  --ink: #18181b;
+  --ink-2: #52525b;
+  --line: #e4e4e7;
+  /* chart series (validated categorical palette, fixed order) */
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --s4: #eda100; --s5: #e87ba4; --s6: #008300; --s7: #6250d6; --s8: #e34948;
+}
+.dark {
+  --surface: #1c1c1f;
+  --page: #111113;
+  --ink: #f4f4f5;
+  --ink-2: #a1a1aa;
+  --line: #2e2e33;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #008300; --s7: #9085e9; --s8: #e66767;
+}
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
+body { background: var(--page); color: var(--ink); font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; }
+code, pre, .mono { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; }
+
+/* ---- visualizer tones: one meaning per colour everywhere in the app ---- */
+.tone, .tone-none { --tb: var(--surface); --td: #a1a1aa; --tf: var(--ink); }
+.tone-active  { --tb: #fde68a; --td: #d97706; --tf: #451a03; }
+.tone-compare { --tb: #bae6fd; --td: #0284c7; --tf: #082f49; }
+.tone-good    { --tb: #86efac; --td: #16a34a; --tf: #052e16; }
+.tone-bad     { --tb: #fecaca; --td: #dc2626; --tf: #450a0a; }
+.tone-done    { --tb: #d1fae5; --td: #6ee7b7; --tf: #064e3b; }
+.tone-window  { --tb: #e0e7ff; --td: #6366f1; --tf: #1e1b4b; }
+.tone-alt     { --tb: #e9d5ff; --td: #9333ea; --tf: #3b0764; }
+.tone-muted   { --tb: transparent; --td: #d4d4d8; --tf: #a1a1aa; }
+.dark .tone-active  { --tb: #b45309; --td: #fbbf24; --tf: #fffbeb; }
+.dark .tone-compare { --tb: #075985; --td: #38bdf8; --tf: #f0f9ff; }
+.dark .tone-good    { --tb: #15803d; --td: #4ade80; --tf: #f0fdf4; }
+.dark .tone-bad     { --tb: #991b1b; --td: #f87171; --tf: #fef2f2; }
+.dark .tone-done    { --tb: #134e4a; --td: #2dd4bf; --tf: #ccfbf1; }
+.dark .tone-window  { --tb: #3730a3; --td: #818cf8; --tf: #eef2ff; }
+.dark .tone-alt     { --tb: #6b21a8; --td: #c084fc; --tf: #faf5ff; }
+.dark .tone-muted   { --tb: transparent; --td: #3f3f46; --tf: #71717a; }
+.dark .tone, .dark .tone-none { --td: #52525b; }
+
+.box { background: var(--tb); border: 1.5px solid var(--td); color: var(--tf); transition: background-color .25s, border-color .25s, color .25s, height .25s; }
+.svg-box { fill: var(--tb); stroke: var(--td); stroke-width: 1.5; transition: fill .25s, stroke .25s; }
+.svg-txt { fill: var(--tf); font-size: 13px; font-weight: 600; text-anchor: middle; dominant-baseline: central; font-family: ui-monospace, Menlo, monospace; }
+.svg-edge { stroke: #a1a1aa; stroke-width: 1.5; fill: none; }
+.dark .svg-edge { stroke: #71717a; }
+.svg-note { fill: var(--ink-2); font-size: 11px; text-anchor: middle; font-family: ui-monospace, Menlo, monospace; }
+.svg-ptr { fill: #4f46e5; font-size: 11px; font-weight: 700; text-anchor: middle; font-family: ui-monospace, Menlo, monospace; }
+.dark .svg-ptr { fill: #a5b4fc; }
+
+.tok { color: var(--l); }
+.dark .tok { color: var(--d); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.prose-p code { background: color-mix(in srgb, var(--ink) 8%, transparent); padding: 1px 5px; border-radius: 4px; font-size: .88em; }
+
+/* section headings inside a page: their own colour, distinct from topics (amber) and actions (indigo) */
+.section-h { color: #0f766e; border-left: 4px solid #14b8a6; padding-left: .6rem; }
+.dark .section-h { color: #5eead4; border-left-color: #2dd4bf; }
+.minor-h { color: #0f766e; }
+.dark .minor-h { color: #5eead4; }
