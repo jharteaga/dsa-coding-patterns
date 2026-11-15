@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { byGroup } from './content/registry';
 import { BigOPage, TreeBasicsPage } from './pages/Primers';
@@ -12,12 +12,62 @@ import { LANGS } from './types';
 function TopBar() {
   const { lang, setLang, locale, setLocale, dark, setDark } = useApp();
   const { t } = useT();
+  const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
+  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
+
   const link = ({ isActive }: { isActive: boolean }) =>
     `rounded-md px-2.5 py-1 text-sm font-medium whitespace-nowrap ${isActive ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`;
+  const mobileLink = ({ isActive }: { isActive: boolean }) =>
+    `block rounded-lg px-3 py-2.5 text-base font-medium ${isActive ? 'bg-indigo-600 text-white' : 'text-(--ink) hover:bg-(--page)'}`;
+  const seg = (active: boolean, pad: string) =>
+    `rounded-md ${pad} text-xs font-bold ${active ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`;
+  const items = [
+    { to: '/', label: t.nav.patterns, end: true },
+    { to: '/big-o', label: t.nav.bigO },
+    { to: '/tree-basics', label: t.nav.trees },
+    { to: '/quiz', label: t.nav.quiz },
+  ];
+
+  const codeLang = (
+    <div className="flex rounded-lg border border-(--line) p-0.5" role="group" aria-label={t.top.codeLang}>
+      {LANGS.map((l) => (
+        <button key={l.id} onClick={() => setLang(l.id)} aria-pressed={lang === l.id} className={seg(lang === l.id, 'px-2.5 py-1')}>
+          {l.label}
+        </button>
+      ))}
+    </div>
+  );
+  const uiLang = (
+    <div className="flex rounded-lg border border-(--line) p-0.5" role="group" aria-label={t.top.uiLang}>
+      {LOCALES.map((l) => (
+        <button key={l.id} onClick={() => setLocale(l.id)} aria-pressed={locale === l.id} lang={l.id} className={seg(locale === l.id, 'px-2 py-1')}>
+          {l.label}
+        </button>
+      ))}
+    </div>
+  );
+  const darkBtn = (
+    <button
+      onClick={() => setDark(!dark)}
+      className="rounded-md border border-(--line) px-2 py-1 text-sm hover:bg-(--page)"
+      aria-label={t.top.toggleDark}
+      title={t.top.toggleDark}
+    >
+      {dark ? '☀' : '☾'}
+    </button>
+  );
+
   return (
     <header className="sticky top-0 z-20 border-b border-(--line) bg-(--surface)/95 backdrop-blur">
-      <div className="mx-auto flex max-w-[1500px] flex-wrap items-center gap-x-3 gap-y-2 px-4 py-2">
-        <NavLink to="/" className="mr-2 text-base font-extrabold tracking-tight">
+      <div className="mx-auto flex h-14 max-w-[1500px] items-center gap-3 px-4">
+        <NavLink to="/" className="mr-2 text-base font-extrabold tracking-tight whitespace-nowrap">
           {locale === 'es' ? (
             <>
               Patrones <span className="text-indigo-600 dark:text-indigo-400">DSA</span>
@@ -28,57 +78,56 @@ function TopBar() {
             </>
           )}
         </NavLink>
-        <nav className="flex gap-1 overflow-x-auto">
-          <NavLink to="/" end className={link}>
-            {t.nav.patterns}
-          </NavLink>
-          <NavLink to="/big-o" className={link}>
-            {t.nav.bigO}
-          </NavLink>
-          <NavLink to="/tree-basics" className={link}>
-            {t.nav.trees}
-          </NavLink>
-          <NavLink to="/quiz" className={link}>
-            {t.nav.quiz}
-          </NavLink>
+        <nav className="hidden gap-1 md:flex" aria-label="Main">
+          {items.map((i) => (
+            <NavLink key={i.to} to={i.to} end={i.end} className={link}>
+              {i.label}
+            </NavLink>
+          ))}
         </nav>
-        <div className="ml-auto flex items-center gap-2">
-          <span className="hidden text-xs text-(--ink-2) sm:inline">{t.top.codeIn}</span>
-          <div className="flex rounded-lg border border-(--line) p-0.5" role="group" aria-label={t.top.codeLang}>
-            {LANGS.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => setLang(l.id)}
-                aria-pressed={lang === l.id}
-                className={`rounded-md px-2.5 py-1 text-xs font-bold ${lang === l.id ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`}
-              >
-                {l.label}
-              </button>
-            ))}
-          </div>
-          <div className="flex rounded-lg border border-(--line) p-0.5" role="group" aria-label={t.top.uiLang}>
-            {LOCALES.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => setLocale(l.id)}
-                aria-pressed={locale === l.id}
-                lang={l.id}
-                className={`rounded-md px-2 py-1 text-xs font-bold ${locale === l.id ? 'bg-indigo-600 text-white' : 'text-(--ink-2) hover:bg-(--page)'}`}
-              >
-                {l.label}
-              </button>
-            ))}
-          </div>
-          <button
-            onClick={() => setDark(!dark)}
-            className="rounded-md border border-(--line) px-2 py-1 text-sm hover:bg-(--page)"
-            aria-label={t.top.toggleDark}
-            title={t.top.toggleDark}
-          >
-            {dark ? '☀' : '☾'}
-          </button>
+        <div className="ml-auto hidden items-center gap-2 md:flex">
+          <span className="hidden text-xs text-(--ink-2) lg:inline">{t.top.codeIn}</span>
+          {codeLang}
+          {uiLang}
+          {darkBtn}
         </div>
+        <button
+          className="ml-auto inline-flex h-10 w-10 items-center justify-center rounded-lg border border-(--line) hover:bg-(--page) md:hidden"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label="Menu"
+          onClick={() => setOpen(!open)}
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            {open ? <path d="M4 4l12 12M16 4L4 16" /> : <path d="M3 5h14M3 10h14M3 15h14" />}
+          </svg>
+        </button>
       </div>
+      {open && (
+        <div id="mobile-menu" className="border-t border-(--line) bg-(--surface) px-4 pt-2 pb-4 md:hidden">
+          <nav className="flex flex-col gap-1" aria-label="Main">
+            {items.map((i) => (
+              <NavLink key={i.to} to={i.to} end={i.end} className={mobileLink}>
+                {i.label}
+              </NavLink>
+            ))}
+          </nav>
+          <div className="mt-3 flex flex-col gap-3 border-t border-(--line) pt-3">
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm text-(--ink-2)">{t.top.codeIn}</span>
+              {codeLang}
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm text-(--ink-2)">{t.top.uiLang}</span>
+              {uiLang}
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-sm text-(--ink-2)">{t.top.toggleDark}</span>
+              {darkBtn}
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
